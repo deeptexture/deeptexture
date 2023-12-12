@@ -1,4 +1,4 @@
-# Deep-Texture A Foldable Haptic Ring for Shape and Texture Rendering in Virtual Reality
+# Deep-Texture : A Foldable Haptic Ring for Shape and Texture Rendering in Virtual Reality
 
 
 ![](./figure/teaser(2).png)
