@@ -38,7 +38,7 @@ Size of the user's hand is different, so we suggest the guidelines for a proper 
 User should measure the x value and choose the right frame.
 
 
-| Finger size 1 |  x       |  Hardware link |
+| Finger size   |     x    |  Hardware link |
 |:-------------:|:--------:|:--------------:|
 |       1       |   x<18   |  [frame_1.ipt](./hardware/Frame/frame_1.ipt)             |
 |       2       |  18<x<22 | [frame_2.ipt](./hardware/Frame/frame_2.ipt)             |
