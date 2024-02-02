@@ -1,81 +1,45 @@
-using System.IO.Ports;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing.Text;
 using UnityEngine;
+using System.IO.Ports;  
 
-public class Serialcom : MonoBehaviour
+
+
+public class deeptextureserial : MonoBehaviour
 {
-    SerialPort serialPort = null;
-    public string portName = "COM4";
-    public int baudRate = 115200;
-    int readTimeout = 50;
+    private static SerialPort sp;
+    private static string incomingMsg = "";
+    string[] split_data;
 
-    public int data1;
-    public int data2;
-
+    // Start is called before the first frame update
     void Start()
     {
-        OpenConnection();
+        sp = new SerialPort("COM5", 115200);
+        sp.Open();
     }
 
-    void OpenConnection()
+    // Update is called once per frame
+    void Update()
     {
-        if (serialPort != null)
-        {
-            if (serialPort.IsOpen)
-            {
-                Debug.Log("Serial port already open");
-                return;
-            }
-            else
-            {
-                serialPort.Close();
-                serialPort = null;
-            }
-        }
+        incomingMsg = sp.ReadTo("\n");
+        
+        //arduino should send data format like "20, 109\n"!
+        //each data is saved in split_data
+        split_data = incomingMsg.Split(',');
+        incomingMsg = "";
+    }
 
-        try
-        {
-            serialPort = new SerialPort(portName, baudRate);
-            serialPort.ReadTimeout = readTimeout;
-            serialPort.Open();
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Error opening serial port: " + e.Message);
-        }
-    }
-    private void Update()
+    private void OnApplicationQuit()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(sp != null)
         {
-            SendData(data1, data2);
-        }
-    }
-    public void SendData(int data1, int data2)
-    {
-        if (serialPort != null && serialPort.IsOpen)
-        {
-            try
+            if (sp.IsOpen)
             {
-                string message = $"{data1},{data2}";
-                serialPort.WriteLine(message);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("Error sending data: " + e.Message);
+                sp.Dispose();
+                sp.Close();
             }
         }
-        else
-        {
-            Debug.LogError("Serial port not open");
-        }
-    }
-  
-
-    void OnDisable()
-    {
-        if (serialPort != null && serialPort.IsOpen)
-        {
-            serialPort.Close();
-        }
+        sp = null;
     }
 }
